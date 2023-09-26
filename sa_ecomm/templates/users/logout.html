@@ -1,0 +1,19 @@
+{% extends 'partials/base.html' %}
+{% block title %}Logout Page{% endblock %}
+{% block content %}
+
+{% block jquery %}
+    <script>
+        setTimeout(() => {
+            $(".alert").alert("close");
+        }, 3000);
+    </script>
+{% endblock %}
+
+    <h2>You have been logged out</h2>
+    <div class="border-top pt-3">
+        <small class="text-muted">
+            <a href="{% url 'login' %}">Log In Again</a>
+        </small>
+    </div>
+{% endblock content %}

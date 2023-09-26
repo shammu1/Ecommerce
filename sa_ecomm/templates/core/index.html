@@ -1,0 +1,124 @@
+{% extends 'partials/base.html' %}
+{% load static %}
+{% block title %}Home Page{% endblock %}
+{% block content %}
+<!-- Categories Start -->
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-3">
+            <nav class="navbar sidebar">
+                <ul class="navbar-nav category">
+                    {% for cat in categories %}
+                    <li class="nav-item category-item">
+                        <a class="nav-link" href="{% url 'core:products-list-category' cat.id %}">{{cat.name}}</a>
+                    </li>
+                    {% endfor %}
+                </ul>
+            </nav>
+        </div>
+
+        <div class="col-lg-9">
+            <div id="header-carousel" class="carousel slide" data-ride="carousel">
+                <div class="carousel-inner">
+                    <div class="carousel-item" style="height: 500px;">
+                        <img class="img-fluid" src="{% static '' %}img/carousel_picture_1.JPG" alt="Image">
+                        <div class="carousel-caption d-flex flex-column align-items-center justify-content-center">
+                            <div class="p-3" style="max-width: 700px;">
+                                <a href="" class="btn btn-light py-2 px-3">Shop Now</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="carousel-item" style="height: 500px;">
+                        <img class="img-fluid" src="{% static '' %}img/carousel_picture_2.jpg" alt="Image">
+                        <div class="carousel-caption d-flex flex-column align-items-center justify-content-center">
+                            <div class="p-3" style="max-width: 700px;">
+                                <a href="" class="btn btn-light py-2 px-3">Shop Now</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="carousel-item active" style="height: 500px;">
+                        <img class="img-fluid" src="{% static '' %}img/carousel_picture_3.jpg" alt="Image">
+                        <div class="carousel-caption d-flex flex-column align-items-center justify-content-center">
+                            <div class="p-3" style="max-width: 700px;">
+                                <a href="" class="btn btn-light py-2 px-3">Shop Now</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="carousel-item" style="height: 500px;">
+                        <img class="img-fluid" src="{% static '' %}img/carousel_picture_4.jpg" alt="Image">
+                        <div class="carousel-caption d-flex flex-column align-items-center justify-content-center">
+                            <div class="p-3" style="max-width: 700px;">
+                                <a href="" class="btn btn-light py-2 px-3">Shop Now</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="carousel-item" style="height: 500px;">
+                        <img class="img-fluid" src="{% static '' %}img/carousel_picture_5.jpg" alt="Image">
+                        <div class="carousel-caption d-flex flex-column align-items-center justify-content-center">
+                            <div class="p-3" style="max-width: 700px;">
+                                <a href="" class="btn btn-light py-2 px-3">Shop Now</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <a class="carousel-control-prev" href="#header-carousel" data-slide="prev">
+                    <div class="btn btn-dark" style="width: 45px; height: 45px;">
+                        <span class="carousel-control-prev-icon mb-n2"></span>
+                    </div>
+                </a>
+                <a class="carousel-control-next" href="#header-carousel" data-slide="next">
+                    <div class="btn btn-dark" style="width: 45px; height: 45px;">
+                        <span class="carousel-control-next-icon mb-n2"></span>
+                    </div>
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+ <!-- Featured Product Start -->
+<div class="featured-product product">
+    <div class="container-fluid pt-5">
+        <div class="text-center mb-4">
+            <h2 class="section-title px-5"><span class="px-2">Featured Products</span></h2>
+        </div>
+            <div class="row align-items-center product-slider product-slider-4">
+                {% for prod in products %}
+                <div class="col-lg-3">
+                    <div class="product-item">
+                        <div class="product-title">
+                            <a href="{% url 'core:product-detail' prod.id %}">{{ prod.title }}</a>
+                            <div class="rating">
+                                {% if prod.avg_rating >= 1 %} <i class="fas fa-star"></i>{% else %}<i class="far fa-star"></i>{% endif %}
+                                {% if prod.avg_rating >= 2 %} <i class="fas fa-star"></i>{% elif prod.avg_rating > 1 %}<i class="fas fa-star-half-alt"></i>{% else %}<i class="far fa-star"></i>{% endif %}
+                                {% if prod.avg_rating >= 3 %} <i class="fas fa-star"></i>{% elif prod.avg_rating > 2 %}<i class="fas fa-star-half-alt"></i>{% else %}<i class="far fa-star"></i>{% endif %}
+                                {% if prod.avg_rating >= 4 %} <i class="fas fa-star"></i>{% elif prod.avg_rating > 3 %}<i class="fas fa-star-half-alt"></i>{% else %}<i class="far fa-star"></i>{% endif %}
+                                {% if prod.avg_rating >= 5 %} <i class="fas fa-star"></i>{% elif prod.avg_rating > 4 %}<i class="fas fa-star-half-alt"></i>{% else %}<i class="far fa-star"></i>{% endif %}
+                            </div>
+                        </div>
+                        <div class="product-image">
+                            <a href="product-detail.html">
+                                <img src="{{ prod.image.url }}" alt="Product Image">
+                            </a>
+                            <div class="product-action">
+                                <a href="{% url 'cart:cart_add' prod.id %}"><i class="fa fa-cart-plus"></i></a>
+                                <a href="#"><i class="fa fa-heart"></i></a>
+                                <a href="{% url 'core:product-detail' prod.id %}"><i class="fa fa-search"></i></a>
+                            </div>
+                        </div>
+                        <div class="product-price">
+                            <h3><span>$</span>{{ prod.price }}</h3>
+                            <a class="btn" href="{% url 'cart:cart_add' prod.id %}"><i class="fa fa-shopping-cart"></i>Buy Now</a>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</div>    
+<!-- Featured Product End -->       
+
+
+{% endblock %}

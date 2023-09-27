@@ -10,4 +10,5 @@ urlpatterns = [
     path('update-cart/',views.update_cart,name='update_cart'),
     #Delete Item From Cart
     path('delete-cart/<int:product_id>/',views.delete_cart,name='delete_cart'),
+    
 ]

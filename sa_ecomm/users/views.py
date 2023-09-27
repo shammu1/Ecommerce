@@ -5,8 +5,6 @@ from django.contrib import messages
 from django.conf import settings
 from django.contrib.auth.forms import AuthenticationForm
 from order.models import Order,OrderItem,Address
-from wishlist.models import *
-from cart.cart import Cart
 from django.http import JsonResponse
 
 User = settings.AUTH_USER_MODEL
@@ -75,9 +73,6 @@ def myaccount_view(request):
     orders = Order.objects.filter(user=request.user).order_by('-order_date')
     billing_addresses = Address.objects.filter(user=request.user,address_type='B').order_by('-default')
     shipping_addresses = Address.objects.filter(user=request.user,address_type='S').order_by('-default')
-    wishlist_count = Wishlist.objects.filter(user=request.user).count()
-    cart = Cart(request)
-    cart_count = cart.get_cart_count()    
     
     if request.method == "GET":    
         account_form = AccountUpdateForm(instance=request.user)
@@ -105,8 +100,6 @@ def myaccount_view(request):
                "shipping_addresses": shipping_addresses,
                "account_form": account_form, 
                "password_form": password_form,
-               "wishlist_count" : wishlist_count,
-               "cart_count" : cart_count,
             }
     return render(request,'users/my_account.html',context)
 
@@ -140,23 +133,15 @@ def make_default_view(request,addr_id):
 def order_details_view(request,id):
     order = Order.objects.get(id=id)
     order_details = OrderItem.objects.filter(order=order)
-    wishlist_count = Wishlist.objects.filter(user=request.user).count()
-    cart = Cart(request)
-    cart_count = cart.get_cart_count()    
-    
+
     context = {
-        "order" : order,
-        "order_details" : order_details,
-        "wishlist_count" : wishlist_count,
-        "cart_count" : cart_count,
+        'order' : order,
+        'order_details' : order_details,
     }
     return render(request,'users/order_details.html',context)
 
 
 def edit_address_view(request,id):
-    wishlist_count = Wishlist.objects.filter(user=request.user).count()
-    cart = Cart(request)
-    cart_count = cart.get_cart_count()    
     
     if request.method == "POST":
         addr = Address.objects.get(id=id)
@@ -197,10 +182,8 @@ def edit_address_view(request,id):
         form = EditAddressForm()
 
     context = {
-        "address" : addr,
-        "address_type" : address_type,
-        "form" : form,
-        "wishlist_count" : wishlist_count,
-        "cart_count" : cart_count,
+        'address' : addr,
+        'address_type' : address_type,
+        'form' : form,
     }
     return render(request,'users/edit_address.html',context)    

@@ -3,8 +3,6 @@ from .models import Category,SubCategory,Product,ProductImages,ProductReview
 from django.contrib import messages
 from django.db.models import Avg
 from users.models import User
-from cart.cart import Cart
-from wishlist.models import Wishlist
 from .forms import ReviewForm
 from taggit.models import Tag
 import datetime
@@ -13,15 +11,10 @@ import datetime
 def index(request):
     products = Product.objects.filter(featured=True)
     categories = Category.objects.all()
-    wishlist_count = Wishlist.objects.filter(user=request.user).count()
-    cart = Cart(request)
-    cart_count = cart.get_cart_count()
-   
+
     context = {
         'products' : products,
         'categories' : categories,
-        'wishlist_count' : wishlist_count,
-        'cart_count' : cart_count,
     }
     return render(request,"core/index.html",context)
 
@@ -32,9 +25,6 @@ PRODUCTS_PER_PAGE = 4
 def products_list_view(request):
     categories = Category.objects.all()
     subcategories = SubCategory.objects.all()    
-    wishlist_count = Wishlist.objects.filter(user=request.user).count()
-    cart = Cart(request)
-    cart_count = cart.get_cart_count()    
     
     # Sort Products
     sort_by = request.GET.get('sort_by')
@@ -113,8 +103,6 @@ def products_list_view(request):
         'sort_by' : sort_by,
         'color': color,
         'price' : price,
-        'wishlist_count' : wishlist_count,
-        'cart_count' : cart_count,
     }
 
     return render(request,"core/products.html",context)
@@ -124,9 +112,6 @@ def products_list_view(request):
 def products_list_view_category(request,cat_id):   
     category = Category.objects.get(id=cat_id)
     subcategories = SubCategory.objects.filter(category=category)
-    wishlist_count = Wishlist.objects.filter(user=request.user).count()
-    cart = Cart(request)
-    cart_count = cart.get_cart_count()
 
     # Sort Products
     sort_by = request.GET.get('sort_by')
@@ -202,17 +187,12 @@ def products_list_view_category(request,cat_id):
         'count' : count,
         'color' : color,
         'price' : price,
-        'wishlist_count' : wishlist_count,
-        'cart_count' : cart_count,
     }
     return render(request,"core/products_category.html",context)
 
 
 def products_list_view_subcategory(request,scat_id):  
     subcategory = SubCategory.objects.get(id=scat_id)
-    wishlist_count = Wishlist.objects.filter(user=request.user).count()
-    cart = Cart(request)
-    cart_count = cart.get_cart_count()
 
 # Sort Products
     sort_by = request.GET.get('sort_by')
@@ -286,8 +266,6 @@ def products_list_view_subcategory(request,scat_id):
         'count' : count,
         'color' : color,
         'price' : price,
-        'wishlist_count' : wishlist_count,
-        'cart_count' : cart_count,
     }
     return render(request,"core/products_subcategory.html",context)
 
@@ -298,9 +276,6 @@ def product_detail_view(request,id):
     product = Product.objects.get(id=id)
     images = product.images.all()
     rel_products = Product.objects.filter(category=product.category)
-    wishlist_count = Wishlist.objects.filter(user=request.user).count()
-    cart = Cart(request)
-    cart_count = cart.get_cart_count()
 
     reviews = ProductReview.objects.filter(product=product)
     print(reviews)
@@ -314,8 +289,6 @@ def product_detail_view(request,id):
         'avg_rating' : avg_rating,
         'reviews_count' : reviews_count,
         'rel_products': rel_products,
-        'wishlist_count' : wishlist_count,
-        'cart_count' : cart_count,
     }
     return render(request,"core/product_detail.html",context)
 
@@ -323,9 +296,6 @@ def product_detail_view(request,id):
 
 def tag_list(request,tag_slug=None):
     products = Product.objects.filter(status=True).order_by('-id')
-    wishlist_count = Wishlist.objects.filter(user=request.user).count()
-    cart = Cart(request)
-    cart_count = cart.get_cart_count()
 
     tag=None
 
@@ -338,8 +308,6 @@ def tag_list(request,tag_slug=None):
         "products" : products,
         "count" : count,
         "tag" : tag,
-        "wishlist_count" : wishlist_count,
-        "cart_count" : cart_count,
     }
 
     return render(request,'core/tags.html',context)

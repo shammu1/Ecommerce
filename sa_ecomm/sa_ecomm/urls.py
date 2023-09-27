@@ -26,7 +26,6 @@ urlpatterns = [
     path('user/',include('users.urls')),
     path('about/',include('about.urls')),
     path('cart/', include('cart.urls', namespace='cart')),
-    path('wishlist/',include('wishlist.urls', namespace='wishlist')),
     path('order/', include('order.urls', namespace='order')),
     path('ckeditor/',include('ckeditor_uploader.urls')),
     #Paypal URL

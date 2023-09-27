@@ -5,6 +5,8 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.views.decorators.http import require_POST
 from core.models import Product
 from order.models import *
+from wishlist.models import *
+from cart.cart import Cart
 from django.http import JsonResponse,HttpResponse
 import json
 from django.template.loader import render_to_string
@@ -36,12 +38,17 @@ def checkout(request):
         print("get checkout")
         try:
             cart = Cart(request)
+            wishlist_count = Wishlist.objects.filter(user=request.user).count()
+            cart_count = cart.get_cart_count()
             total_cart_price = cart.get_total_cart_price()
             form = CheckoutForm()   
+            
             context = {
                 'form': form,
                 'cart': cart,
                 'total_cart_price': total_cart_price,
+                'wishlist_count' : wishlist_count,
+                'cart_count' : cart_count,
                # 'paypal_payment_button': paypal_payment_button,
             }
             print('check billing')
@@ -69,13 +76,15 @@ def checkout(request):
             print(shipping_address_qs[0])
         except:
             pass    
-        return render(request, "order/checkout.html", context)
+    
 #        except ObjectDoesNotExist:
 #            messages.warning(request,f'No items in the Cart.')
 #            return redirect("cart:checkout")
 
     if request.method == "POST":
         cart = Cart(request)
+        wishlist_count = Wishlist.objects.filter(user=request.user).count()
+        cart_count = cart.get_cart_count()
         total_cart_price = cart.get_total_cart_price()
         form = CheckoutForm(request.POST)
         print("post")
@@ -171,16 +180,9 @@ def checkout(request):
         context = {
                     'form': form,
                     'cart': cart,
+                    'wishlist_count' : wishlist_count,
+                    'cart_count' : cart_count,
                    # 'paypal_payment_button': paypal_payment_button,
                 }
-        return render(request,"order/checkout.html",context)    
+    return render(request,"order/checkout.html",context)    
 
-@csrf_exempt
-def payment_completed_view(request):
-    context = request.POST
-    return render(request,'order/payment-completed.html',context)
-
-
-@csrf_exempt
-def payment_failed_view(request):
-    return render(request,'order/payment-failed.html')

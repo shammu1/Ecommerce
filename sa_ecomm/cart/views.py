@@ -2,6 +2,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.views.decorators.http import require_POST
 from core.models import Product
 from order.models import *
+from wishlist.models import *
 from .cart import Cart
 from .forms import CheckoutForm
 from django.http import JsonResponse,HttpResponse
@@ -54,7 +55,14 @@ def delete_cart(request,product_id):
 
 def cart_detail(request):
     cart = Cart(request)
+    wishlist_count = Wishlist.objects.filter(user=request.user).count()
+    cart_count = cart.get_cart_count()
     total_cart_price = cart.get_total_cart_price()
-    return render(request, 'cart/cart.html', {'cart': cart, 'total_cart_price': total_cart_price, #'coupon_apply_form': coupon_apply_form
-    })
+    context = {'cart': cart, 
+                'total_cart_price': total_cart_price, 
+                'wishlist_count' : wishlist_count,
+                'cart_count' : cart_count,
+    }
+    return render(request, 'cart/cart.html', context)
+
 

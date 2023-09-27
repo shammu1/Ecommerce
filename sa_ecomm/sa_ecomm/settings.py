@@ -42,6 +42,8 @@ INSTALLED_APPS = [
     'users',
     'order',
     'cart',
+    'wishlist',
+    'about',
     
     #third party
     "phonenumber_field",

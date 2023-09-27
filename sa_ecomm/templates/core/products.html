@@ -141,7 +141,7 @@
                             </a>
                             <div class="product-action">
                                 <a href="{% url 'cart:cart_add' prod.id %}"><i class="fa fa-cart-plus"></i></a>
-                                <a href="#"><i class="fa fa-heart"></i></a>
+                                <a href="{% url 'wishlist:wishlist-add' prod.id %}"><i class="fa fa-heart"></i></a>
                                 <a href="{% url 'core:product-detail' prod.id %}"><i class="fa fa-search"></i></a>
                             </div>
                         </div>
